@@ -11,13 +11,30 @@ the loot to Carmen, she has to arrest the villain.'''
 
 import datetime
 from datetime import date, time, datetime, timedelta
+import sys 
+from beautifultable import BeautifulTable
 
 case_start_date = datetime.today()
+#sets starting date for the game from which deadline will be calculated
 
+game_data = {('Florence', 0): {
+'Embassy':
+'''Diplomat\n\n
+\'I heard her talking business on the phone and she said, "Well, another day, another rupee. 
+She mentioned a startup called Paytm.\'''', 
 
-game_data = {}
+'Street Market': 
+'''Peddler\n\n
+I didn\'t see anyone but are you interested in buying some candies? It\'s for a good cause.''',
+'Sports Club':
+'''Barman\n\n
+I think saw the person you're looking for. She said she was going to the capital of Karnataka.'''},
+('Bengaluru', 12) : {'Foreign Ministry':
+ '''\nUnder Secretary\n\n
+\'Sources tell me she was planning on visiting a catholic church in the Alps.\''''
+ } }
 
-
+######DATE########
 
 def current_date(date_today, travel_time):
 	'''Calculates the passage of time by adding travel time to current date
@@ -64,6 +81,28 @@ def brief():
 
 
 #######TRAVEL######
+def travel_menu():
+	'''Prints list with destinations and respective time of flight
+	Arguments: 
+	None
+	Returns:
+	int: new city and travel time'''
+	#print welcome to Employee Travel Service
+
+	travel_table = BeautifulTable()
+	#creates a new table 
+	travel_table.column_headers = ['Destination', 'Flight Duration']
+	for destination, ttime in game_data.keys():
+		travel_table.append_row([destination, ttime])
+	travel_table.append_column('Flight #', ['1711', '1931'])
+	print travel_table
+
+	travel_choice =(raw_input('What is your next destination? (Type city name)')).title
+	
+
+
+
+
 ######OPTIONS######
 
 def menu_options():
@@ -72,16 +111,29 @@ def menu_options():
 	None
 	Returns:
 	int: the users'menu choice''' 
+
+	options_menu = '\n\t\tREVIEW BRIEF\t\tQUIT GAME\t\tRETURN TO MAIN MENU\n\t\t-           \t\t-        \t\t -'
+	print options_menu
+	choice = (raw_input('>')).upper()
+
+	if choice == 'R':
+		brief()
+	elif choice == 'E':
+
+		game_main_menu()
+
+	elif choice == 'Q':
+		#quit
+		sys.exit()
+	
+
 def game_main_menu():
 	"""Prints current date/location and a menu and asks the user to make a choice.
     Arguments:
-      None
+    None
     Returns:
-      int: the user's menu choice
+    int: the user's menu choice
     """
-    #function for current location
-
-   	current_date(new_date,0)
 
 	print '\n\t\tOPTIONS\t\tTRAVEL\t\tINVESTIGATE\t\tDATA\n\t\t-      \t\t-     \t\t-          \t\t-'
 
@@ -99,17 +151,21 @@ def execute_repl(current_city):
 #add warrant within execute_repl outside the while loop, inside execute_repl and takes city and warrant
 
     while True:
-    	print current_city
     	#print current time
+    	print('Current Location: {}'.format(current_city))
+
+    	current_date(new_date,0)
+    	
     	choice = game_main_menu()
 
     	if choice == 'O':
-    		#options menu
-    		print 'I ran options'#Create global options variable
+    		#options submenu
+    		menu_options()
 
     	elif choice == 'T':
     		#print list of cities dict.keys() 
-    		print 'I ran travel'
+    		travel_menu()
+
     		current_city = "vatican"
 
     	elif choice == 'I':
