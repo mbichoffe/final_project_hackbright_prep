@@ -16,6 +16,10 @@ from beautifultable import BeautifulTable
 
 case_start_date = datetime.today()
 #sets starting date for the game from which deadline will be calculated
+travel_time = 0 
+date_today = datetime.today()
+current_location = 'Florence'
+#sets starting location for the game and gets updated with current_location function
 
 game_data = {('Florence', 0): {
 'Embassy':
@@ -33,31 +37,6 @@ I think saw the person you're looking for. She said she was going to the capital
  '''\nUnder Secretary\n\n
 \'Sources tell me she was planning on visiting a catholic church in the Alps.\''''
  } }
-
-######DATE########
-
-def current_date(date_today, travel_time):
-	'''Calculates the passage of time by adding travel time to current date
-	Arguments:
-	date_today: current date in the game 
-	travel_time: amount of time it takes to reach the chosen destination on travel menu
-	Returns: 
-	Current date on arrival at destination'''
-	
-	d = date_today
-	t = timedelta(hours = travel_time)
-	date_today = d + t
-	print date_today.strftime('%B %d, %I:%M '' %p')
-	return date_today
-
-
-def deadline(current_date):
-	'''Calculates the players' deadline to complete the mission by adding 5 days to the
-	date the case started'''
-	case_closed_deadline = case_start_date + timedelta(days = 5)
-	return case_closed_deadline.strftime('%B, %d, %I:%M '' %p')
-
-	
 
 def brief():
 	'''Prints current case brief with crime information and deadline
@@ -81,14 +60,17 @@ def brief():
 
 
 #######TRAVEL######
-def travel_menu():
+def menu_travel():
 	'''Prints list with destinations and respective time of flight
 	Arguments: 
 	None
 	Returns:
 	int: new city and travel time'''
 	#print welcome to Employee Travel Service
-
+	global current_location 
+	destinations_times = game_data.keys()
+	list_with_destinations = [place[0] for place in destinations_times]
+	 #extracts the cities from the (city, time) tuple and creates a list 
 	travel_table = BeautifulTable()
 	#creates a new table 
 	travel_table.column_headers = ['Destination', 'Flight Duration']
@@ -97,11 +79,55 @@ def travel_menu():
 	travel_table.append_column('Flight #', ['1711', '1931'])
 	print travel_table
 
-	travel_choice =(raw_input('What is your next destination? (Type city name)')).title
+	users_location = (raw_input('What is your next destination? (Type city name)\n')).title()
+
+	#gets user input on next destination
+	print users_location, 'This is current location'
+	if users_location not in list_with_destinations:
+		print 'Invalid Choice'
 	
+	else:
+		current_location = users_location	
+		print 'Your reservations have been confirmed to {} on Flight # . Enjoy the in-flight meal.'.format(current_location)
 
 
+	print current_location #city
 
+######DATE########
+
+def get_hours_from_dict(game_data):
+	global current_location
+	global travel_time
+	destinations_times = game_data.keys()
+	destinations_times = dict(destinations_times)
+	travel_time = destinations_times[current_location]
+	return travel_time
+
+def current_date(date_now, travel_time):
+	'''Calculates the passage of time by adding travel time to current date
+	Arguments:
+	date_today: current date in the game 
+	travel_time: amount of time it takes to reach the chosen destination on travel menu
+	Returns: 
+	Current date on arrival at destination'''
+	global date_today
+	d = date_today
+	t = timedelta(hours = travel_time)
+	date_today = d + t
+	print date_today.strftime('%B %d, %I:%M '' %p')
+	return date_today
+
+
+def deadline(current_date):
+	'''Calculates the players' deadline to complete the mission by adding 5 days to the
+	date the case started'''
+	case_closed_deadline = case_start_date + timedelta(days = 3)
+	return case_closed_deadline.strftime('%B, %d, %I:%M '' %p')	
+
+
+######INVESTIGATE########
+def menu_investigate():
+	pass
 
 ######OPTIONS######
 
@@ -140,21 +166,23 @@ def game_main_menu():
 	choice = raw_input('>')
 	return choice.upper()
 
-def execute_repl(current_city):
+def execute_repl():
     """Execute the repl loop for the control structure of the program. 
 
     Arguments:
-        current_city
+        current_location
     Returns:
         None
     """
+    global current_location
 #add warrant within execute_repl outside the while loop, inside execute_repl and takes city and warrant
 
     while True:
     	#print current time
-    	print('Current Location: {}'.format(current_city))
-
-    	current_date(new_date,0)
+    	print('Current Location: {}'.format(current_location))
+    	get_hours_from_dict(game_data) 
+    	current_date(date_today, travel_time) 
+    	#replace 0 with variable that returns hours once function is done
     	
     	choice = game_main_menu()
 
@@ -164,9 +192,9 @@ def execute_repl(current_city):
 
     	elif choice == 'T':
     		#print list of cities dict.keys() 
-    		travel_menu()
+    		menu_travel()
 
-    		current_city = "vatican"
+    		
 
     	elif choice == 'I':
     		#needs current city 
@@ -262,7 +290,7 @@ brief()
 
 start_city = 'Florence'
 
-execute_repl(start_city)
+execute_repl()
 
 
 
