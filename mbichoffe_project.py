@@ -1,4 +1,4 @@
-''' Where in the World is Carmen Santiago(Hackbright Prep final project from Marina Bichoffe)
+""" Where in the World is Carmen Santiago(Hackbright Prep final project from Marina Bichoffe)
 The goal of this game is to track around the world and arrest a villain from E.V.I.L., a criminal organization led by Carmen Santiago. 
 The player, a special agent from the ACME Detective Agency, is alerted that a stupefying theft has been committed. She will receive a brief 
 with information about the case and a deadline. She has the mission to find and arrest the criminal. In order to make an arrest the player 
@@ -7,7 +7,7 @@ must have a warrant, and it must be the right warrant.
 The player will be transported to the scene of the crime, where she will complete tasks in order to find clues to infer the suspect's next 
 destination and to create an arrest warrant describing the guilty party's attributes. The chase around the world continues until the player 
 has collected enough evidence to determine the culprit. When the player reaches her final destination where the villain is going to pass off 
-the loot to Carmen, she has to arrest the villain.'''
+the loot to Carmen, she has to arrest the villain."""
 
 import datetime
 from datetime import date, time, datetime, timedelta
@@ -37,13 +37,50 @@ I think saw the person you're looking for. She said she was going to the capital
  '''\nUnder Secretary\n\n
 \'Sources tell me she was planning on visiting a catholic church in the Alps.\''''
  } }
+#this dictionary includes the cities and respective travel time as keys, and another dictionary includes the places and clues available on each
+
+Villains = {'Bessie May Mucho': {'Sex': 'Female' ,
+'Hair Color' : 'Brown',
+'Hobby'  : 'Mountain Climbing',
+'Auto': 'Limousine',
+'Feature': 'Jewelry'}, 
+"""Anita Bath""": {"""Sex""": """Female""", 
+'Hair Color': 'Blonde', 
+'Hobby': 'Limousine', 
+'Feature': 'Tattoo'},
+ """Ivanna Steele""": {"""Sex""": """Female""" ,
+'Hair Color' : 'Red',
+'Hobby'  : 'Tennis',
+'Auto': 'Denby Roadster',
+'Feature': 'Jewelry'},
+"""M.T. Pockets""": {"""Sex""": """Male""" ,
+'Hair Color' : 'Red',
+'Hobby'  : 'Mountain Climbing',
+'Auto': 'Convertible',
+'Feature': 'Tattoo'},
+"""Noah Clue""": {"""Sex""": """Male""" ,
+'Hair Color' : 'Red',
+'Hobby'  : 'Croquet',
+'Auto': 'Convertible',
+'Feature': 'Tattoo'},
+"""Perry Syte""": {"""Sex""": """Male""" ,
+'Hair Color' : 'Red',
+'Hobby'  : 'Croquet',
+'Auto': 'Convertible',
+'Feature': 'Tattoo'},
+"""Hardley Worthit""": {"""Sex""": """Male""" ,
+'Hair Color' : 'Blond',
+'Hobby'  : 'Croquet',
+'Auto': 'Limousine',
+'Feature': 'Limp'}}
+
 
 def brief():
-	'''Prints current case brief with crime information and deadline
+	"""Prints current case brief with crime information and deadline
 	Arguments: 
 	none
 	Returns:
-	none'''
+	none"""
 
 	print '\n\t\t\t***FLASH***\n\t\t\t-----------'
  
@@ -60,6 +97,7 @@ def brief():
 
 
 #######TRAVEL######
+
 def menu_travel():
 	'''Prints list with destinations and respective time of flight
 	Arguments: 
@@ -87,7 +125,7 @@ def menu_travel():
 		print 'Invalid Choice'
 	
 	else:
-		current_location = users_location	
+		current_location = users_location#if the location is on the list, prints the destination and updates the variable current_location	
 		print 'Your reservations have been confirmed to {} on Flight # . Enjoy the in-flight meal.'.format(current_location)
 
 
@@ -96,6 +134,11 @@ def menu_travel():
 ######DATE########
 
 def get_hours_from_dict(game_data):
+	'''Gets the current city and returns travel time as an integer
+	Arguments: 
+	game_data: dictionary
+	Returns:
+	travel time'''
 	global current_location
 	global travel_time
 	destinations_times = game_data.keys()
@@ -126,8 +169,20 @@ def deadline(current_date):
 
 
 ######INVESTIGATE########
+
 def menu_investigate():
-	pass
+	'''Gets user current location and returns three places to be investigated.'''
+	current_location
+	for x,y in game_data.keys():
+		if x == current_location:
+			city_places_clues_dict = game_data[x,y]
+			print city_places_clues_dict
+			places_list = city_places_clues_dict.keys()
+			print places_list
+			clues_list = city_places_clues_dict.values()
+			print clues_list
+#remove /n/n from the dictionary
+		
 
 ######OPTIONS######
 
@@ -180,9 +235,11 @@ def execute_repl():
     while True:
     	#print current time
     	print('Current Location: {}'.format(current_location))
+
     	get_hours_from_dict(game_data) 
+
     	current_date(date_today, travel_time) 
-    	#replace 0 with variable that returns hours once function is done
+    	#prints user current date in MM, DD, HH:MM
     	
     	choice = game_main_menu()
 
@@ -192,21 +249,21 @@ def execute_repl():
 
     	elif choice == 'T':
     		#print list of cities dict.keys() 
-    		menu_travel()
-
-    		
+    		menu_travel()	
 
     	elif choice == 'I':
     		#needs current city 
-    		print 'I ran investigate'
+    		menu_investigate()
+    		
     	elif choice == 'D':
     		print 'I ran data'
 
     	else: 
     		print 'Invalid choice'
 
+####GAME INTRO####
 
-print '''\
+print """\
 ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 		WHERE IN THE WORLD IS CARMEN SANTIAGO?
@@ -219,7 +276,7 @@ print '''\
 		            May 2017
                                  				
 ::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::'''
+::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::"""
 
 raw_input('')
 #pauses the script until the user presses Enter
@@ -228,7 +285,7 @@ print'''\n\n\n\t\t\tINTRODUCTION\n\t\t\t------------'''
 
 print'\n\n\nThe Chase is On...'
 
-print'''\n\n\n\tIn this game, you are a rookie detective for the Acme Detective Agency, who are known for 
+print"""\n\n\n\tIn this game, you are a rookie detective for the Acme Detective Agency, who are known for 
 bringing down the most elusive and dangerous criminals in the world.
 It's your first day on the job, and Carmen Santiago and her Evil Villains International League (E.V.I.L). 
 have once again made sensational headlines in the newspaper.
@@ -237,11 +294,11 @@ have once again made sensational headlines in the newspaper.
 the world's most valuable treasures, while outwitting every crime expert from 
 New York to Sydney. 
 Now they've struck again. And you, the newest employee of the Acme Detective Agency, 
-have been given the near-impossible assignment of tracking them down.'''
+have been given the near-impossible assignment of tracking them down."""
 
 raw_input('\n\n\n\nPress enter to continue')
 
-print '''\n\n\t\t\tYour Assignment\n\t\t\t---------------'''
+print '\n\n\t\t\tYour Assignment\n\t\t\t---------------'''
 
 print'''\n\n\n\tThe thief is making a few stops around the world, before meeting with Carmen 
 to pass off the loot.  Your job is to track him or her down, using clues you unearth along the way. 
