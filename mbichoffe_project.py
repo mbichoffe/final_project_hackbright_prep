@@ -14,13 +14,14 @@ from datetime import date, time, datetime, timedelta
 import sys 
 from beautifultable import BeautifulTable
 
-case_start_date = datetime.today()
 #sets starting date for the game from which deadline will be calculated
+case_start_date = datetime.today()
 travel_time = 0 
 date_today = datetime.today()
-current_location = 'Florence'
 #sets starting location for the game and gets updated with current_location function
+current_location = 'Florence'
 
+#this dictionary includes the cities and respective travel time as keys, and another dictionary includes the places and clues available on each
 game_data = {('Florence', 0): {
 'Embassy':
 '''Diplomat\n\n
@@ -88,13 +89,21 @@ Villains = {
 'Auto': 'Limousine',
 'Feature': 'Limp'}}
 
-Warrant = {
+warrant = {
 'Sex': None,
 'Hair Color': None ,
 'Hobby': None ,
 'Auto': None ,
 'Feature': None ,
 }
+
+criminal =  {"""Ivanna Steele""": 
+ {"""Sex""": """Female""" ,
+'Hair Color' : 'Red',
+'Hobby'  : 'Tennis',
+'Auto': 'Denby Roadster',
+'Feature': 'Jewelry'}}
+
 
 def brief():
 	"""Prints current case brief with crime information and deadline
@@ -155,11 +164,11 @@ def menu_travel():
 ######DATE########
 
 def get_hours_from_dict(game_data):
-	'''Gets the current city and returns travel time as an integer
+	"""Gets the current city and returns travel time as an integer
 	Arguments: 
 	game_data: dictionary
 	Returns:
-	travel time'''
+	travel time"""
 	global current_location
 	global travel_time
 	destinations_times = game_data.keys()
@@ -168,12 +177,12 @@ def get_hours_from_dict(game_data):
 	return travel_time
 
 def current_date(date_now, travel_time):
-	'''Calculates the passage of time by adding travel time to current date
+	"""Calculates the passage of time by adding travel time to current date
 	Arguments:
 	date_today: current date in the game 
 	travel_time: amount of time it takes to reach the chosen destination on travel menu
 	Returns: 
-	Current date on arrival at destination'''
+	Current date on arrival at destination"""
 	global date_today
 	d = date_today
 	t = timedelta(hours = travel_time)
@@ -268,9 +277,33 @@ def menu_data():
 		print 'Invalid Choice'
 		menu_data()
 
+
 def menu_warrant():
-##gets user input on warrant info and updates dictionary##
-	pass
+	"""Prints currrent warrant and gets user input on what to add
+	Arguments: 
+	None
+	Returns:
+	None"""
+	global warrant 
+	print '\n\n\t\t\t***Warrant Data***'
+	for attribute, value in warrant.items():
+		print '{} : {}\n'.format(attribute, value)
+
+	add_attribute = (raw_input('\n\n\nWhich item would you like to add or change?\n')).title()
+	
+	attribute_input = warrant.get(add_attribute, 'invalid')
+	
+	if attribute_input == 'invalid':
+		print '{} is not listed on the dossier'.format(str(add_attribute))
+	else:
+		new_value = raw_input('Enter the suspect\'s {} :  \n'.format(add_attribute).lower())
+
+		warrant[add_attribute] = new_value 
+	return warrant 
+
+
+def
+	
 def menu_dossier():
 	"""Returns a list with suspects and gets user input on which dossier she wants to read"""
 	print '\n\n\n\t\t\t****ACME Secret E.V.I.L. Dossier**** '
@@ -280,6 +313,7 @@ def menu_dossier():
 	print '\n\n'
 	view_dossier = (raw_input('Which dossier would you like to read? (Type full name)\n')).title()
 	#maybe add string split and strip
+	print view_dossier
 	villain_dossier = Villains.get(view_dossier, 'Invalid Choice')
 	if villain_dossier == 'Invalid Choice':
 		menu_dossier()
@@ -287,9 +321,6 @@ def menu_dossier():
 		print '\n\n\t\t\t{}\'s Dossier'.format(view_dossier)
 		for category, description in villain_dossier.items():
 			print '{} : {}'.format(category, description)
-
-
-
 
 	
 #####GAME MAIN MENU####
@@ -315,6 +346,7 @@ def execute_repl():
         None
     """
     global current_location
+    global warrant 
 #add warrant within execute_repl outside the while loop, inside execute_repl and takes city and warrant
 
     while True:
@@ -342,7 +374,6 @@ def execute_repl():
 
 
     	elif choice == 'D':
-
     		menu_data()
 
     	else: 
