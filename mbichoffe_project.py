@@ -39,41 +39,62 @@ I think saw the person you're looking for. She said she was going to the capital
  } }
 #this dictionary includes the cities and respective travel time as keys, and another dictionary includes the places and clues available on each
 
-Villains = {'Bessie May Mucho': {'Sex': 'Female' ,
+Villains = {
+'Bessie May Mucho': 
+{'Sex': 'Female' ,
 'Hair Color' : 'Brown',
 'Hobby'  : 'Mountain Climbing',
 'Auto': 'Limousine',
 'Feature': 'Jewelry'}, 
-"""Anita Bath""": {"""Sex""": """Female""", 
+
+"""Anita Bath""": 
+{"""Sex""": """Female""", 
 'Hair Color': 'Blonde', 
 'Hobby': 'Limousine', 
 'Feature': 'Tattoo'},
- """Ivanna Steele""": {"""Sex""": """Female""" ,
+
+ """Ivanna Steele""": 
+ {"""Sex""": """Female""" ,
 'Hair Color' : 'Red',
 'Hobby'  : 'Tennis',
 'Auto': 'Denby Roadster',
 'Feature': 'Jewelry'},
-"""M.T. Pockets""": {"""Sex""": """Male""" ,
+
+"""M.T. Pockets""": 
+{"""Sex""": """Male""" ,
 'Hair Color' : 'Red',
 'Hobby'  : 'Mountain Climbing',
 'Auto': 'Convertible',
 'Feature': 'Tattoo'},
-"""Noah Clue""": {"""Sex""": """Male""" ,
+
+"""Noah Clue""": 
+{"""Sex""": """Male""" ,
 'Hair Color' : 'Red',
 'Hobby'  : 'Croquet',
 'Auto': 'Convertible',
 'Feature': 'Tattoo'},
-"""Perry Syte""": {"""Sex""": """Male""" ,
+
+"""Perry Syte""": 
+{"""Sex""": """Male""" ,
 'Hair Color' : 'Red',
 'Hobby'  : 'Croquet',
 'Auto': 'Convertible',
 'Feature': 'Tattoo'},
-"""Hardley Worthit""": {"""Sex""": """Male""" ,
+
+"""Hardley Worthit""": 
+{"""Sex""": """Male""" ,
 'Hair Color' : 'Blond',
 'Hobby'  : 'Croquet',
 'Auto': 'Limousine',
 'Feature': 'Limp'}}
 
+Warrant = {
+'Sex': None,
+'Hair Color': None ,
+'Hobby': None ,
+'Auto': None ,
+'Feature': None ,
+}
 
 def brief():
 	"""Prints current case brief with crime information and deadline
@@ -120,7 +141,7 @@ def menu_travel():
 	users_location = (raw_input('What is your next destination? (Type city name)\n')).title()
 
 	#gets user input on next destination
-	print users_location, 'This is current location'
+
 	if users_location not in list_with_destinations:
 		print 'Invalid Choice'
 	
@@ -170,28 +191,49 @@ def deadline(current_date):
 
 ######INVESTIGATE########
 
+places_list = 0
+clues_list = 0
 def menu_investigate():
-	'''Gets user current location and returns three places to be investigated.'''
+	'''Gets user's current location and returns three places to be investigated and the clues in it'''
 	current_location
+	global places_list
+	global clues_list
 	for x,y in game_data.keys():
 		if x == current_location:
 			city_places_clues_dict = game_data[x,y]
-			print city_places_clues_dict
 			places_list = city_places_clues_dict.keys()
-			print places_list
 			clues_list = city_places_clues_dict.values()
-			print clues_list
+			get_user_input_investigate()
+
+def get_user_input_investigate():
+	"""Gets users input for three options of places to investigate or return to main menu"""
+	#to do: print title with 'investigate current city'
+	#create list with tuples and return the second tuple
+	for index, place in enumerate(places_list, 1):
+		print '\t{} - {}'.format(index, place)
+
+	investigate_choice = raw_input("\n\nWhich of these places would you like to investigate?\nChoose a number or R = Return to Main Menu\n")
+	if investigate_choice.upper() == 'R':
+		game_main_menu()
+	elif int(investigate_choice) <= len(places_list):
+		place_to_investigate = int(investigate_choice)
+		print clues_list[(place_to_investigate - 1)]
+		get_user_input_investigate()
+
+	else:
+		print 'Invalid Choice'
+		get_user_input_investigate()
 #remove /n/n from the dictionary
 		
 
 ######OPTIONS######
 
 def menu_options():
-	'''Gives the player the option to review the brief, return to main menu or quit the game
+	"""Gives the player the option to review the brief, return to main menu or quit the game
 	Arguments:
 	None
 	Returns:
-	int: the users'menu choice''' 
+	int: the users'menu choice""" 
 
 	options_menu = '\n\t\tREVIEW BRIEF\t\tQUIT GAME\t\tRETURN TO MAIN MENU\n\t\t-           \t\t-        \t\t -'
 	print options_menu
@@ -206,8 +248,51 @@ def menu_options():
 	elif choice == 'Q':
 		#quit
 		sys.exit()
-	
 
+####DATA######
+def menu_data():
+	"""Displays menu with options to view dossiers or add info to Warrant"""
+
+	data_menu = '\n\t\tDOSSIERS\t\tWARRANT\n\t\t-       \t\t-      '
+	print data_menu
+	choice = (raw_input('>')).upper()
+
+	if choice == 'D':
+		#return dossie function
+		menu_dossier()
+
+	elif choice == 'W':
+		menu_warrant()
+
+	else:
+		print 'Invalid Choice'
+		menu_data()
+
+def menu_warrant():
+##gets user input on warrant info and updates dictionary##
+	pass
+def menu_dossier():
+	"""Returns a list with suspects and gets user input on which dossier she wants to read"""
+	print '\n\n\n\t\t\t****ACME Secret E.V.I.L. Dossier**** '
+
+	for villain in sorted(Villains.keys()):
+		print '\n\t{}'.format(villain)
+	print '\n\n'
+	view_dossier = (raw_input('Which dossier would you like to read? (Type full name)\n')).title()
+	#maybe add string split and strip
+	villain_dossier = Villains.get(view_dossier, 'Invalid Choice')
+	if villain_dossier == 'Invalid Choice':
+		menu_dossier()
+	else:
+		print '\n\n\t\t\t{}\'s Dossier'.format(view_dossier)
+		for category, description in villain_dossier.items():
+			print '{} : {}'.format(category, description)
+
+
+
+
+	
+#####GAME MAIN MENU####
 def game_main_menu():
 	"""Prints current date/location and a menu and asks the user to make a choice.
     Arguments:
@@ -234,8 +319,8 @@ def execute_repl():
 
     while True:
     	#print current time
-    	print('Current Location: {}'.format(current_location))
-
+    	print('\n\n\nCurrent Location: {}'.format(current_location))
+    	#prints users' current city
     	get_hours_from_dict(game_data) 
 
     	current_date(date_today, travel_time) 
@@ -254,9 +339,11 @@ def execute_repl():
     	elif choice == 'I':
     		#needs current city 
     		menu_investigate()
-    		
+
+
     	elif choice == 'D':
-    		print 'I ran data'
+
+    		menu_data()
 
     	else: 
     		print 'Invalid choice'
@@ -303,7 +390,7 @@ print '\n\n\t\t\tYour Assignment\n\t\t\t---------------'''
 print'''\n\n\n\tThe thief is making a few stops around the world, before meeting with Carmen 
 to pass off the loot.  Your job is to track him or her down, using clues you unearth along the way. 
 \nClues can point to the city itself or the country in which the city is located. Clues can  
-also point out to some of the culprit's characteristics. There are 5 possible suspects, 
+also point out to some of the culprit's characteristics. There are 7 possible suspects, 
 any one of whom could be the thief.
 \n\tYou can only arrest the criminal when you have a warrant, and it must be the right 
 warrant.
